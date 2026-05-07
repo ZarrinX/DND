@@ -4,7 +4,7 @@
 
 ## Drawn Shades
 
-Drawn Shades are entities native to the Nullshore Expanse — dim, semi-aware things that drift along the sandbar and congregate near magical sources. Under normal circumstances they are passive, drawn to energy the way insects are drawn to light. When pulled through a forestall inversion into the material world, the sudden change in environment disorients them completely. They become aggressive, reactive, and fixated on the nearest magical source — which is typically whatever pulled them through.
+Drawn Shades are entities native to the Nullshore Expanse — dim, semi-aware things that drift along the sandbar and congregate near magical sources. Under normal circumstances they are passive, drawn to energy the way insects are drawn to light. When pulled through an active byway connection into the material world, the sudden change in environment disorients them completely. They become aggressive, reactive, and fixated on the nearest magical source — which is typically whatever pulled them through.
 
 They appear as tattered silhouettes: upright, vaguely humanoid, but wrong in the way a reflection in bad glass is wrong. Their movement is too fluid. They have no visible joints, no separation between limbs and body. They pass through closed doors and other thresholds without resistance, as if the concept of a door does not apply to them.
 
@@ -71,7 +71,7 @@ Byways were not created for living beings. Most are lethal, impassable, or both.
 - **Hard-light constructs** — stable but hostile environments of solidified planar energy
 - **Boundary zones** — open, liminal spaces where two realities press against one another (the Nullshore Expanse is one such zone)
 
-Byways are not static. They shift in response to the realities bordering them, and prolonged habitation or structured energy (such as a forestall inversion) can permanently alter their character.
+Byways are not static. They shift in response to the realities bordering them, and prolonged habitation or structured energy (such as an active byway connection maintained by force) can permanently alter their character.
 
 ---
 
@@ -131,6 +131,10 @@ False houses violate both. In the vicinity of a false house, travelers report he
 
 False houses are predatory, semi-living structures. They are not constructs built by any civilization — they are emergent phenomena of the byway, entities that evolved to exploit the one thing the Nullshore attracts: travelers seeking shelter.
 
+### The Gilded Hall
+
+The false house at the center of this campaign is known — to those who have studied it — as **The Gilded Hall**. The name is a field designation used by the arcanist cadre, drawn from the structure's exterior mimicry: an imposing manor facade with gilt detailing that does not degrade with proximity the way a typical false house does. It is unusually stable in appearance. This is not craftsmanship. It is a symptom of how well-fed it has become.
+
 ### Nature
 
 A false house presents as a dwelling. It mimics the architectural features of whatever a given traveler would most associate with safety — a farmhouse, an inn, a home. Up close, the mimicry degrades. Proportions are wrong. Doors open onto nothing. Windows reflect light from angles that don't exist.
@@ -147,11 +151,21 @@ A sufficiently old false house is a museum of stolen multiversal history, and it
 
 Under normal circumstances, a false house feeds on travelers it lures inside. The consumption is total — no remains, no trace. Only the traveler's possessions remain, eventually incorporated as new artifacts.
 
-The false house at the center of this campaign has been fed externally for an extended period by the inversion of the village forestall. This has freed it from the need to hunt. It has used that surplus energy to evolve.
+The Gilded Hall has not needed to hunt in some time. It found a better food source: a careless arcanist who entered it alone.
+
+### The Absorbed Arcanist
+
+The Gilded Hall consumed an arcanist — but did not kill them. Most false houses destroy their prey completely. The Gilded Hall did something different: it absorbed the arcanist into its structure and held them there, alive, suspended within its walls. The arcanist remains connected to the portal equipment they carried at the time of absorption.
+
+The house has no intelligence. It did not plan this. It does not know what it has. It is driven only by hunger, and hunger found a use for what it had taken.
+
+The arcanist's portal equipment — field instruments attuned to planar boundaries and designed to interface with structured magical systems — remains active inside the house. Through this equipment, The Gilded Hall extended its reach across the byway boundary and latched onto the forestall's signal. The connection does not invert the forestall by design. It inverts it the way a drain inverts a pool: the house's hunger simply pulls, and the forestall's energy flows toward it, arriving in the Nullshore reversed and feeding The Gilded Hall continuously.
+
+Whether the arcanist is still aware of what is happening is unknown. They cannot be extracted without collapsing the connection — and collapsing the connection may be the only way to stop the feeding.
 
 ### Evolution
 
-Extended feeding on structured magical energy has allowed this false house to develop capabilities beyond its baseline nature:
+The presence of a living arcanist kept inside its walls — and the sustained flow of energy from the forestall — has allowed The Gilded Hall to develop capabilities beyond the baseline nature of a false house:
 
 - **Storm summoning** — it can initiate and sustain storm events
 - **Door construction** — it has begun building stable dimensional doors, a capability normally exclusive to ancient byway nodes
@@ -171,15 +185,17 @@ In the material world, the forestall functions as designed: it repels hostile ma
 
 ### Nullshore Inversion
 
-The Nullshore Expanse does not interpret the forestall as the village does. In the byway, magical barriers of the forestall's type undergo an inversion effect — the repulsive force becomes attractive. The forestall's energy, rather than pushing threats away, draws them inward and feeds nearby entities.
+The forestall's signal does not invert naturally at the byway boundary. This is not a known property of barrier magic, and it is not something that should be possible without an active interface on the Nullshore side.
 
-This is not a malfunction. It is a property of how structured magical barriers interact with interstitial byway space. The forestall was never designed to operate across a byway boundary. No one in the village knows this is possible.
+The inversion is the result of The Gilded Hall's connection to the absorbed arcanist's portal equipment. The equipment is attuned to structured magical systems and designed to reach across planar boundaries. The house's hunger drives it to pull constantly. The forestall, built to push outward, encounters this pull and reverses — its repulsive force becomes attractive, drawing energy inward across the boundary rather than projecting it outward. The forestall is still functioning exactly as designed. It is just being used against itself by something that does not understand what it is doing and does not need to.
+
+No one in the village knows this is possible. The arcanist cadre suspects an active interface exists but has not yet identified it.
 
 ### Current Effect
 
-Every time the villagers reinforce the forestall with ritual magic — which they are doing constantly, believing it will solve the crisis — they send a pulse of energy into the Nullshore. The false house absorbs this pulse. The more the village fights back, the stronger the false house becomes.
+Every time the villagers reinforce the forestall with ritual magic — which they are doing constantly, believing it will solve the crisis — they send a pulse of energy into the Nullshore. The Gilded Hall absorbs this pulse through the inverted connection. The more the village fights back, the stronger the house becomes.
 
-The gateway attacks on the village are a side effect of the false house's growth, not the primary threat. The primary threat is what the false house is becoming.
+The creature attacks on the village are a side effect of the house's growth, not the primary threat. Drawn Shades congregate near the inverted forestall signal and are pulled through the connection when the pulse is strong enough. The primary threat is what The Gilded Hall is becoming.
 
 ---
 

@@ -89,9 +89,10 @@ She offers: 200 gold per person, a guide who knows the other side, and whatever 
 - A guide in the supply town of **Caldport** (one day's travel) knows the Nullshore and can take them through
 
 #### What Is Withheld (GM knowledge only)
-- The forestall is not weakening — it is fully functional and feeding the threat through inversion
-- Every time the ritual is performed, the false house in the Nullshore grows stronger, like an addiction. it needs more and more
-- The creatures aren't attacking — they are being pulled toward the forestall's signal and react with aggression when they arrive
+- The forestall is not weakening — it is fully functional, but its signal has been hijacked
+- A false house called **The Gilded Hall** absorbed a living arcanist and held them inside, still connected to their portal equipment. Through that equipment, The Gilded Hall latched onto the forestall's signal across the byway boundary and inverted it — the forestall's repulsive force now pulls energy toward the Nullshore instead of pushing threats away
+- Every time the ritual is performed, The Gilded Hall feeds. The more the village fights back, the stronger it becomes
+- The creatures aren't attacking — they are being pulled toward the inverted forestall signal and react with aggression when they arrive
 - Serath suspects something is wrong with the forestall's behavior but has not said so to Maren, because she has no explanation
 
 ---

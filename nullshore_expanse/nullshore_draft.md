@@ -105,16 +105,17 @@ Transitional spaces between realities shaped by:
 ---
 
 ## Nullshore Effect (Inversion)
-- Becomes an attractor instead of a barrier
-- Draws creatures and energy inward
-- Feeds nearby entities
+- Not a natural byway property
+- The Gilded Hall absorbed a living arcanist, still connected to their portal equipment
+- Equipment interfaces with the forestall across the byway boundary
+- The house's hunger inverts the forestall's signal: repulsion becomes attraction
 
 ---
 
 ## Current Situation
 - Villagers reinforce the forestall with ritual magic
-- This energy is inverted in Nullshore
-- The false house is feeding on this energy
+- Energy flows into the Nullshore through the inverted connection
+- The Gilded Hall absorbs each pulse; the more the village fights, the stronger it becomes
 
 ---
 
@@ -138,15 +139,17 @@ Predatory, semi-living structures that:
 
 ### Feeding
 - Normally consume travelers
-- This false house is externally fed by the forestall
+- The Gilded Hall absorbed a living arcanist instead of destroying them
+- Arcanist is held alive inside, connected to portal equipment
+- This connection taps the forestall as a continuous food source
 
 ---
 
 ### Evolution
-- Has gained the ability to:
-  - Summon storms
-  - Build its own doorway
-  - Expand into a stable byway node
+- The absorbed arcanist and sustained forestall feeding have enabled:
+  - Storm summoning
+  - Building its own dimensional doors
+  - Expanding into a stable byway node
 
 ---
 
