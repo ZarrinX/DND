@@ -144,20 +144,24 @@ She offers: 200 gold per person, a guide who knows the other side, and whatever 
 ---
 
 ## Act 3 — Nullshore Exploration (30–65%)
+- Players enter through **The Hollow** (ruined arcanist station, entry point)
 - Players learn:
   - Sound deception
   - Door mechanics
   - Storm behavior
+- Encounter at **The Shattered Pavilion** (midbar ruins, creature activity)
 - Encounter:
   - Fishermen
   - False houses
   - Shore creatures
 
 ### Todo
-- [ ] Write Nullshore arrival description
+- [ ] Write Nullshore arrival / The Hollow entry scene
+- [ ] Write The Hollow description (what players see on arrival, buried equipment, gate housing)
 - [ ] Design sound deception discovery moment
 - [ ] Design fisherman encounter(s)
 - [ ] Design safe false house encounter (teaching moment, not lethal)
+- [ ] Design The Shattered Pavilion encounter (creature ambush or hazard, midbar)
 - [ ] Design shore creature encounter
 - [ ] Write first storm event
 - [ ] Define what clues players can gather about the target house
@@ -180,14 +184,14 @@ She offers: 200 gold per person, a guide who knows the other side, and whatever 
 ## Act 5 — Midpoint Revelation (80–90%)
 
 ### Todo
-- [ ] Write ruined great house description
+- [ ] Write The Ruined Manse description
 - [ ] Create the arcanist cadre (3 named NPCs, roles, personalities)
 - [ ] Write Door 1 — Burning Nursery scene description
 - [ ] Write Door 2 — Ship Galley scene description
 - [ ] Write revelation dialogue / arcanist exposition scene
 - [ ] Decide how much the arcanists know about the forestall inversion
 
-### The Ruined Great House
+### The Ruined Manse
 - Destroyed false house
 - Arcanist cadre (3) present
 - Active containment devices on doors

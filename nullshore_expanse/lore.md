@@ -209,7 +209,7 @@ Arcanist field equipment includes:
 - **Anchor runes** — inscribed markers that stabilize a small area against spatial shift, used to create reliable return points
 - **Phase compasses** — instruments that detect proximity to byway boundaries and dimensional doors
 
-Arcanists operate in cadres — small groups of three to five who cross-check each other's observations and keep one another grounded in environments designed to disorient. A cadre at the ruined great house in the Nullshore has been conducting containment operations on an unusually active cluster of dimensional doors.
+Arcanists operate in cadres — small groups of three to five who cross-check each other's observations and keep one another grounded in environments designed to disorient. A cadre at **The Ruined Manse** in the Nullshore has been conducting containment operations on an unusually active cluster of dimensional doors.
 
 ### Thaumatic Technology (Thaumtec)
 
@@ -221,9 +221,9 @@ The most significant class of thaumtec in active use is **threshold equipment**:
 
 ---
 
-## The Ruined Great House
+## The Ruined Manse
 
-Near the target false house stands the wreckage of a former great house — a false house that was, at some point, destroyed. The ruins are structurally unstable but navigable. Several dimensional doors within the ruin remain active despite the house's destruction.
+Near The Gilded Hall stands the wreckage of a former false house — a false house that was, at some point, destroyed. The ruins are structurally unstable but navigable. Several dimensional doors within the ruin remain active despite the house's destruction.
 
 An arcanist cadre has set up containment devices on two of these doors and is studying them.
 
@@ -236,3 +236,21 @@ A jungle environment, dense and hot. Hundreds of eggs are visible throughout the
 An active scene aboard a working vessel. Crew members move through the galley, eating, talking, performing routine tasks. They are entirely unaware of observers on the other side of the door. The barrier installed by the arcanists prevents any interaction — sound does not pass, and nothing can be thrown through. The crew appears to be from a specific point in time, though which point is not immediately apparent.
 
 Both doors connect to other realities. The arcanists believe these connections were formed by the false house before its destruction — and that the target false house is attempting to build similar connections, but permanently and at scale.
+
+---
+
+## The Hollow
+
+The Hollow is a ruined arcanist station near the southern end of the Nullshore sandbar. It was once a forward outpost — a small structure used by arcanist teams to stage equipment and recover after byway transit. It is the site of the mapped gate used by the current cadre and, now, the players' entry point into the Nullshore.
+
+The station is no longer operational. Most of the structure has collapsed or been absorbed into the sandbar. What remains is the gate housing — a metal and crystal threshold frame, still functional, still holding its anchor runes — and the remnants of a perimeter wall. Inside the wall, the sand is noticeably more stable than the surrounding bar. Equipment left here by previous expeditions is partially buried.
+
+The Hollow sits approximately 5,000 paces south of The Gilded Hall by the arcanist cadre's resonance mapping.
+
+---
+
+## The Shattered Pavilion
+
+The Shattered Pavilion is the wreckage of a large open structure approximately midway along the sandbar between The Hollow and The Ruined Manse. Its original purpose is not known — the structure does not match any arcanist field station design, and it predates current cadre records. It may have been a false house in an early or incomplete stage of development, or something else entirely.
+
+The Pavilion is structurally collapsed. Its remains form a rough ring of broken columns and tilted slabs, partially buried by sand drift. The ground within the ring is disturbed — the crystallized sand has a different texture, as if something has been moving beneath it. The area is a known congregation point for Nullshore creatures.

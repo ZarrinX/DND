@@ -17,9 +17,19 @@ Items in this file are campaign-wide gaps not already tracked in `plot_structure
 ## Missing Scenes
 
 - [ ] Write travel scene from Harrow Fen to Caldport (Act 1 → Act 2) — tone-setting, not necessarily a full encounter, but something to fill the journey
-- [ ] Write the byway entry scene — the actual moment of crossing; this is a strong atmospheric beat that currently has no draft
+- [ ] Write the byway entry scene — the actual moment of crossing through The Hollow gate; what the transition feels like, what players first see on arrival
+- [ ] Write The Hollow description — the ruined arcanist station, buried equipment, gate housing, stable sand within the perimeter wall
 - [ ] Write the false house exterior description for the safe encounter in Act 3 — what does a false house look like from the outside before players understand what it is
 - [ ] Write the false house interior description for the target house before the final encounter — what environmental cues show it is at full power
+
+---
+
+## Named Location Descriptions (Lore → Play)
+
+- [ ] Write The Hollow arrival scene (atmospheric, sets Nullshore tone — see lore.md for site details)
+- [ ] Write The Shattered Pavilion encounter — creature ambush or environmental hazard using the disturbed sand and collapsed columns; determine creature type(s) and D&D Beyond stat block references
+- [ ] Write The Ruined Manse exterior and interior description — what players see before they encounter the arcanist cadre
+- [ ] Write The Gilded Hall exterior approach description — what makes it feel wrong compared to the safe false house encountered earlier
 
 ---
 
