@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+
+# electron-builder cache
+.cache/
+build/
+
+# TypeScript incremental build
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

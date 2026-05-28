@@ -1,0 +1,1182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nullshore Expanse Campaign Tracker</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #66727f;
+      --paper: #f7f4ec;
+      --panel: #fffdf7;
+      --line: #d8d1c2;
+      --red: #9d2833;
+      --blue: #1f5f86;
+      --green: #31695f;
+      --gold: #b2792f;
+      --shadow: 0 14px 38px rgba(31, 38, 46, 0.14);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #fffaf0;
+      color: var(--ink);
+      border-radius: 7px;
+      min-height: 38px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: #a99b85;
+      background: #fff4dc;
+    }
+
+    button.primary {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: white;
+    }
+
+    button.icon {
+      width: 38px;
+      padding: 0;
+      display: inline-grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--blue);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 62vh;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(16, 20, 24, 0.16), rgba(16, 20, 24, 0.76)),
+        linear-gradient(90deg, rgba(102, 14, 28, 0.42), rgba(13, 67, 98, 0.34)),
+        url("images/nullshore_expanse.png") center / cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-inner {
+      position: relative;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0 42px;
+      color: white;
+    }
+
+    .hero h1 {
+      margin: 0;
+      max-width: 900px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: 0;
+      text-shadow: 0 4px 22px rgba(0, 0, 0, 0.42);
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 18px 0 0;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: #f3ead8;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(216, 209, 194, 0.9);
+      background: rgba(247, 244, 236, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 64px;
+      overflow-x: auto;
+    }
+
+    .brand {
+      flex: 0 0 auto;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 7px;
+      color: var(--ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav a:hover {
+      background: #ebe3d4;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    section {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:last-child {
+      border-bottom: 0;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: clamp(1.35rem, 3vw, 2.15rem);
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+      letter-spacing: 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.52fr);
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel,
+    .act,
+    .item,
+    .clock,
+    .npc-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      border-left: 5px solid var(--green);
+      padding: 12px;
+      background: rgba(255, 253, 247, 0.72);
+    }
+
+    .metric:nth-child(2) {
+      border-left-color: var(--gold);
+    }
+
+    .metric:nth-child(3) {
+      border-left-color: var(--red);
+    }
+
+    .metric:nth-child(4) {
+      border-left-color: var(--blue);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .progress-shell {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e3daca;
+      border: 1px solid #cdc1ae;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--red), var(--gold), var(--blue));
+      transition: width 180ms ease;
+    }
+
+    .act-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .act {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .act-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+    }
+
+    .act p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      white-space: nowrap;
+    }
+
+    .status input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--green);
+    }
+
+    .todo-filters,
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .todo-filters button.active {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+
+    .item-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+      padding: 11px 12px;
+      box-shadow: none;
+    }
+
+    .item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--green);
+    }
+
+    .item.done .label {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #eee5d6;
+      color: #4b4439;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag.red {
+      background: #f2d7d9;
+      color: #7d1f2b;
+    }
+
+    .tag.blue {
+      background: #d6e6ef;
+      color: #164d72;
+    }
+
+    .tag.green {
+      background: #d7e7e2;
+      color: #20564c;
+    }
+
+    .map-frame {
+      min-height: 420px;
+      background: #111;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .map-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      object-fit: cover;
+    }
+
+    .clock {
+      padding: 14px;
+    }
+
+    .clock-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .clock-controls {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) 38px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--red);
+    }
+
+    textarea,
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fffdf8;
+      color: var(--ink);
+      padding: 10px;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .timer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .timer-output {
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(2.2rem, 8vw, 4rem);
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .timer .toolbar {
+      justify-content: flex-end;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 8px 0;
+      border-top: 1px solid #e4dccf;
+    }
+
+    .timeline-row strong {
+      color: var(--blue);
+    }
+
+    .npc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .npc-card {
+      padding: 13px;
+      box-shadow: none;
+    }
+
+    .npc-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .prompt-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .prompt-text {
+      padding: 15px;
+      min-height: 120px;
+      border: 1px dashed #b9aa93;
+      border-radius: var(--radius);
+      background: #fff8e9;
+      font-size: 1.02rem;
+    }
+
+    .warning {
+      border-left: 5px solid var(--red);
+      background: #fff7f5;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .split-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    @media (max-width: 900px) {
+      .grid.two,
+      .grid.three,
+      .summary-row,
+      .npc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .act {
+        grid-template-columns: 38px minmax(0, 1fr);
+      }
+
+      .act .status {
+        grid-column: 2;
+      }
+
+      .timer {
+        grid-template-columns: 1fr;
+      }
+
+      .timer .toolbar {
+        justify-content: flex-start;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .toolbar,
+      button,
+      .hero {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      main {
+        width: auto;
+        padding: 0;
+      }
+
+      .panel,
+      .act,
+      .item,
+      .clock,
+      .npc-card {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>The Nullshore Expanse</h1>
+      <p>Campaign command page for pacing, prep gaps, lore continuity, D&amp;D Beyond production, and story development.</p>
+    </div>
+  </header>
+
+  <nav class="topbar" aria-label="Campaign sections">
+    <div class="topbar-inner">
+      <div class="brand">Nullshore Tracker</div>
+      <div class="nav">
+        <a href="#overview">Overview</a>
+        <a href="#acts">Acts</a>
+        <a href="#prep">Prep</a>
+        <a href="#session">Session</a>
+        <a href="#clocks">Clocks</a>
+        <a href="#story">Story Lab</a>
+        <a href="#beyond">D&amp;D Beyond</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section id="overview">
+      <h2>Overview</h2>
+      <div class="grid two">
+        <div class="panel">
+          <div class="summary-row">
+            <div class="metric"><strong id="prepPercent">0%</strong><span>prep complete</span></div>
+            <div class="metric"><strong>4 hr</strong><span>target play time</span></div>
+            <div class="metric"><strong id="openCount">0</strong><span>open prep items</span></div>
+            <div class="metric"><strong id="homebrewCount">0</strong><span>homebrew flags</span></div>
+          </div>
+          <div style="margin-top: 18px;">
+            <div class="progress-shell" aria-label="Preparation progress">
+              <div class="progress-fill" id="prepBar"></div>
+            </div>
+          </div>
+          <p class="small">Saved locally in this browser. Use this as a live prep desk while writing the adventure.</p>
+        </div>
+        <div class="panel warning">
+          <h3>Lore Continuity Watch</h3>
+          <p>The forestall is not failing. It is functioning as designed while The Gilded Hall uses the absorbed arcanist's portal equipment to invert the signal and feed.</p>
+          <p class="small">Current lore gaps to resolve before final design: storm phases, fishermen betrayal lore, and Option C setup requirements.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="acts">
+      <h2>Act Timeline</h2>
+      <div class="act-list" id="actList"></div>
+    </section>
+
+    <section id="prep">
+      <h2>Prep Board</h2>
+      <div class="panel">
+        <div class="toolbar">
+          <div class="todo-filters" role="group" aria-label="Todo filters">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="Act 1">Act 1</button>
+            <button data-filter="Act 2">Act 2</button>
+            <button data-filter="Act 3">Act 3</button>
+            <button data-filter="Act 4">Act 4</button>
+            <button data-filter="Act 5">Act 5</button>
+            <button data-filter="Final">Final</button>
+            <button data-filter="DDB">D&amp;D Beyond</button>
+            <button data-filter="Lore">Lore</button>
+          </div>
+          <div class="split-actions">
+            <button id="exportState">Snapshot Notes</button>
+            <button id="resetState">Reset Tracker</button>
+          </div>
+        </div>
+        <div class="item-list" id="todoList"></div>
+      </div>
+    </section>
+
+    <section id="session">
+      <h2>Session Pacing</h2>
+      <div class="grid two">
+        <div class="panel">
+          <div class="timer">
+            <div>
+              <div class="timer-output" id="timerOutput">04:00:00</div>
+              <div class="progress-shell" aria-label="Session time remaining">
+                <div class="progress-fill" id="timerBar" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <button id="startTimer" class="primary">Start</button>
+              <button id="pauseTimer">Pause</button>
+              <button id="resetTimer">Reset</button>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-row"><strong>0:00</strong><span>Act 1: Harrow Fen attack, forestall ritual, hiring.</span></div>
+            <div class="timeline-row"><strong>0:36</strong><span>Act 2: Caldport guide, supplies, byway briefing.</span></div>
+            <div class="timeline-row"><strong>1:12</strong><span>Act 3: The Hollow, Nullshore rules, false house teaching encounter, Shattered Pavilion.</span></div>
+            <div class="timeline-row"><strong>2:36</strong><span>Act 4: Approach, contradictions, storm escalation.</span></div>
+            <div class="timeline-row"><strong>3:12</strong><span>Act 5: Ruined Manse, arcanist revelation, final choice setup.</span></div>
+            <div class="timeline-row"><strong>3:36</strong><span>Final encounter and return to Harrow Fen.</span></div>
+          </div>
+        </div>
+        <div class="map-frame">
+          <img src="images/nullshore_map-display.png" alt="Nullshore campaign map">
+        </div>
+      </div>
+    </section>
+
+    <section id="clocks">
+      <h2>Threat Clocks</h2>
+      <div class="grid three" id="clockList"></div>
+    </section>
+
+    <section id="story">
+      <h2>Story Lab</h2>
+      <div class="grid two">
+        <div class="panel prompt-box">
+          <h3>Creative Prompt</h3>
+          <div class="prompt-text" id="promptText"></div>
+          <div class="toolbar">
+            <button id="newPrompt" class="primary">New Prompt</button>
+            <button id="pinPrompt">Pin To Notes</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Campaign Notes</h3>
+          <textarea id="notes" placeholder="Live notes, invented names, clue chains, player decisions, and lore questions."></textarea>
+        </div>
+      </div>
+      <div class="npc-grid" style="margin-top: 16px;">
+        <article class="npc-card">
+          <h3>Elder Maren</h3>
+          <span class="tag green">Quest Giver</span>
+          <p>Practical village leader who believes the forestall is weakening.</p>
+        </article>
+        <article class="npc-card">
+          <h3>Serath</h3>
+          <span class="tag blue">Anomaly Witness</span>
+          <p>Ritual keeper with logs showing the forestall pull has shifted inward.</p>
+        </article>
+        <article class="npc-card">
+          <h3>Pol</h3>
+          <span class="tag">Gate Guard</span>
+          <p>First friendly face. His unconscious partner still needs a name.</p>
+        </article>
+        <article class="npc-card">
+          <h3>The Gilded Hall</h3>
+          <span class="tag red">Homebrew Threat</span>
+          <p>A false house becoming permanent byway infrastructure.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="beyond">
+      <h2>D&amp;D Beyond Production</h2>
+      <div class="grid two">
+        <div class="panel">
+          <h3>Known Homebrew Entries</h3>
+          <div class="item-list" id="homebrewList"></div>
+        </div>
+        <div class="panel warning">
+          <h3>Compatibility Warnings</h3>
+          <p>The remaining D&amp;D Beyond risk is the phased false house fight. Storms are DM-facing time pressure only, and thaumtec is plot color unless a specific tool becomes player-usable later.</p>
+          <p class="small">No D&amp;D Beyond entry is needed for the storm clock or descriptive thaumtec equipment as currently planned.</p>
+          <p class="small">Official stat block references currently safe to use: Guard for Pol if needed, Veteran for Captain Duvesh if needed. Drawn Shades require homebrew entry.</p>
+        </div>
+        <div class="panel">
+          <h3>Official Creature References</h3>
+          <div class="item-list" id="officialCreatureList"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "nullshore-tracker-v1";
+    const SESSION_SECONDS = 4 * 60 * 60;
+
+    const acts = [
+      {
+        id: "act-1",
+        number: 1,
+        title: "The Village",
+        range: "0-15%",
+        budget: "36 min",
+        summary: "Harrow Fen is under attack. The forestall appears to be failing. The party is hired to fix the gateway.",
+        belief: "The false house is the cause."
+      },
+      {
+        id: "act-2",
+        number: 2,
+        title: "Supply Town",
+        range: "15-30%",
+        budget: "36 min",
+        summary: "Caldport supplies, guide contact, byway briefing, and first hints that the forestall behavior is wrong.",
+        belief: "The Nullshore is dangerous but navigable with the right knowledge."
+      },
+      {
+        id: "act-3",
+        number: 3,
+        title: "Nullshore Exploration",
+        range: "30-65%",
+        budget: "84 min",
+        summary: "The Hollow, sound deception, storm behavior, fishermen, safe false house, shore danger, and clue gathering.",
+        belief: "The house is more than a predator."
+      },
+      {
+        id: "act-4",
+        number: 4,
+        title: "Approach",
+        range: "65-80%",
+        budget: "36 min",
+        summary: "Environmental contradictions sharpen while storms escalate and The Gilded Hall comes into view.",
+        belief: "The target is actively changing the byway."
+      },
+      {
+        id: "act-5",
+        number: 5,
+        title: "Ruined Manse Revelation",
+        range: "80-90%",
+        budget: "24 min",
+        summary: "The arcanist cadre explains dimensional doors, the absorbed arcanist, and the forestall inversion.",
+        belief: "The village is feeding the threat by trying to survive."
+      },
+      {
+        id: "final",
+        number: 6,
+        title: "Final Approach and House Engine",
+        range: "90-100%",
+        budget: "24 min",
+        summary: "Players choose whether to destroy the house, sever the link, or attempt the hardest repair.",
+        belief: "The ending depends on what they are willing to risk."
+      }
+    ];
+
+    const todos = [
+      ["Act 1", "Write gate combat encounter block: creature count, positions, D&D Beyond setup."],
+      ["Act 1", "Write Serath's anomaly log as a player-facing handout."],
+      ["Act 1", "Write Act 1 to Act 2 transition from Harrow Fen to Caldport."],
+      ["Act 1", "Write brief village layout and key locations for spatial reference."],
+      ["Act 1", "Add forestall stone interaction contingencies."],
+      ["Act 1", "Name Pol's unconscious partner."],
+      ["Act 2", "Design Caldport: feel, key locations, guide contact, and supply access."],
+      ["Act 2", "Create guide and fisherman NPCs."],
+      ["Act 2", "Write byway briefing scene."],
+      ["Act 2", "Define available tools and equipment the players can acquire."],
+      ["Act 2", "Plant at least one forestall inversion foreshadowing detail."],
+      ["Act 3", "Write Nullshore arrival and The Hollow entry scene."],
+      ["Act 3", "Write The Hollow description: ruined station, buried equipment, gate housing."],
+      ["Act 3", "Design sound deception discovery moment."],
+      ["Act 3", "Design fisherman encounter."],
+      ["Act 3", "Design safe false house encounter as a teaching moment."],
+      ["Act 3", "Design The Shattered Pavilion encounter."],
+      ["Act 3", "Design shore creature encounter."],
+      ["Act 3", "Write first storm event."],
+      ["Act 3", "Define clues players can gather about The Gilded Hall."],
+      ["Act 4", "Write environmental contradiction descriptions."],
+      ["Act 4", "Define storm escalation triggers and phases."],
+      ["Act 4", "Write the moment The Gilded Hall comes into view."],
+      ["Act 4", "Design approach path hazards or encounters."],
+      ["Act 5", "Write The Ruined Manse exterior and interior description."],
+      ["Act 5", "Create the arcanist cadre: three named NPCs with roles and personalities."],
+      ["Act 5", "Write Door 1: Burning Nursery scene description."],
+      ["Act 5", "Write Door 2: Ship Galley scene description."],
+      ["Act 5", "Write revelation dialogue and arcanist exposition scene."],
+      ["Act 5", "Decide how much the arcanists know about forestall inversion."],
+      ["Final", "Write transition from ruined house to target house."],
+      ["Final", "Make choices A, B, and C clearly discoverable before final encounter."],
+      ["Final", "Define full-power environmental cues."],
+      ["Final", "Design False House phased boss in D&D Beyond-friendly parts."],
+      ["Final", "Design Option A mechanics: destroy the house."],
+      ["Final", "Design Option B mechanics: sever the forestall link."],
+      ["Final", "Design Option C mechanics: repair the system."],
+      ["Final", "Write epilogue beats for each option and the return scene."],
+      ["Lore", "Write fishermen lore and define what betrayed means."],
+      ["Lore", "Define storm escalation phases as DM-facing time pressure only."],
+      ["Lore", "Define thaumtec field equipment as plot color, not player-facing mechanics."],
+      ["Lore", "Write byway entry mechanics."],
+      ["DDB", "Compile full homebrew checklist."],
+      ["DDB", "Verify official magic item, spell, and condition names."],
+      ["DDB", "Confirm encounter builder workaround for phased boss fight."]
+    ];
+
+    const clocks = [
+      ["hall", "The Gilded Hall Feeding", "Each forestall ritual pushes this upward. At 6, the house reaches full power."],
+      ["storm", "Storm Escalation", "Use as DM-facing time pressure. At 6, move the scene forward or cut to the next pressure point."],
+      ["village", "Harrow Fen Exhaustion", "Each delay raises collapse risk among ritual participants."],
+      ["clues", "Forestall Inversion Clues", "Increase when the party sees inward pull, shade behavior, Serath's log, or arcanist evidence."],
+      ["option-c", "Option C Setup", "Repair should only be available if earlier prep clues and tools were secured."],
+      ["house-door", "Gateway Completion", "The final threat clock: at 6, The Gilded Hall becomes infrastructure."]
+    ];
+
+    const prompts = [
+      "Write Serath's anomaly log as five dated entries. Let each entry be mundane at first, then quietly more frightening.",
+      "Design Caldport as a supply town that teaches the Nullshore rules through ordinary commerce instead of exposition.",
+      "Name Pol's unconscious partner and give that NPC one detail that makes Pol's panic personal.",
+      "Create one fisherman who can summon storms. What betrayal brought them to the Nullshore, and what do they want now?",
+      "Invent three clues that distinguish a safe false house teaching encounter from The Gilded Hall without explaining the truth.",
+      "Write the first storm as a pacing clock: what changes at stages 1 through 6, and what table cue tells you to move the scene forward?",
+      "Give the arcanist cadre three conflicting opinions about whether the absorbed arcanist can be saved.",
+      "Design Option C so it requires one tool from Caldport, one clue from Act 3, and one arcanist insight from Act 5.",
+      "Write a boxed-text reveal where the party realizes every forestall reinforcement has been feeding the house.",
+      "Create the artifact hoard as five embedded objects, each from a different reality and each hinting at a prior failed traveler."
+    ];
+
+    const homebrew = [
+      ["Drawn Shade", "Creature", "Already drafted in lore.md. Requires D&D Beyond homebrew entry."],
+      ["The Gilded Hall", "Boss / Lair", "Likely separate D&D Beyond entries per phase or encounter segment."]
+    ];
+
+    const officialCreatures = [
+      ["Bloodless Sea", "Swarm of Quippers", "Sudden boiling violence under the red water."],
+      ["Bloodless Sea", "Giant Crocodile", "Large territorial predator beneath the crimson surface."],
+      ["Cerulean Sorrows", "Plesiosaurus", "Slow enormous silhouette beneath the blue water."],
+      ["Cerulean Sorrows", "Dragon Turtle", "Apex warning; use as consequence, not a routine fight."],
+      ["Sandbar", "Giant Spider", "Sand Stilt Spider visual reskin only; no burrow speed."]
+    ];
+
+    const defaultState = {
+      checked: {},
+      acts: {},
+      clocks: {},
+      notes: "",
+      timerRemaining: SESSION_SECONDS,
+      promptIndex: 0
+    };
+
+    let state = loadState();
+    let activeFilter = "all";
+    let timerId = null;
+    let lastTick = null;
+
+    function loadState() {
+      try {
+        return { ...defaultState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+      } catch {
+        return { ...defaultState };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSummary();
+    }
+
+    function idFrom(text) {
+      return text.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    }
+
+    function renderActs() {
+      const root = document.getElementById("actList");
+      root.innerHTML = "";
+      acts.forEach((act) => {
+        const el = document.createElement("article");
+        el.className = "act";
+        el.innerHTML = `
+          <div class="act-number">${act.number}</div>
+          <div>
+            <h3>${act.title} <span class="tag">${act.range}</span> <span class="tag blue">${act.budget}</span></h3>
+            <p>${act.summary}</p>
+            <p><strong>Player belief:</strong> ${act.belief}</p>
+          </div>
+          <label class="status">
+            <input type="checkbox" data-act="${act.id}">
+            Ready
+          </label>
+        `;
+        const checkbox = el.querySelector("input");
+        checkbox.checked = Boolean(state.acts[act.id]);
+        checkbox.addEventListener("change", () => {
+          state.acts[act.id] = checkbox.checked;
+          saveState();
+        });
+        root.appendChild(el);
+      });
+    }
+
+    function renderTodos() {
+      const root = document.getElementById("todoList");
+      root.innerHTML = "";
+      todos
+        .filter(([tag]) => activeFilter === "all" || tag === activeFilter)
+        .forEach(([tag, label]) => {
+          const key = idFrom(`${tag}-${label}`);
+          const row = document.createElement("label");
+          row.className = `item ${state.checked[key] ? "done" : ""}`;
+          row.innerHTML = `
+            <input type="checkbox">
+            <span class="label">${label}</span>
+            <span class="tag ${tag === "DDB" || tag === "Final" ? "red" : tag === "Lore" ? "blue" : ""}">${tag}</span>
+          `;
+          const checkbox = row.querySelector("input");
+          checkbox.checked = Boolean(state.checked[key]);
+          checkbox.addEventListener("change", () => {
+            state.checked[key] = checkbox.checked;
+            row.classList.toggle("done", checkbox.checked);
+            saveState();
+          });
+          root.appendChild(row);
+        });
+    }
+
+    function renderClocks() {
+      const root = document.getElementById("clockList");
+      root.innerHTML = "";
+      clocks.forEach(([id, title, help]) => {
+        const value = Number(state.clocks[id] || 0);
+        const el = document.createElement("article");
+        el.className = "clock";
+        el.innerHTML = `
+          <div class="clock-head">
+            <h3>${title}</h3>
+            <span class="tag red"><span data-value>${value}</span>/6</span>
+          </div>
+          <p class="small">${help}</p>
+          <div class="clock-controls">
+            <button class="icon" title="Decrease">-</button>
+            <input type="range" min="0" max="6" step="1" value="${value}" aria-label="${title}">
+            <button class="icon" title="Increase">+</button>
+          </div>
+        `;
+        const [minus, plus] = el.querySelectorAll("button");
+        const range = el.querySelector("input");
+        const valueLabel = el.querySelector("[data-value]");
+        const setValue = (next) => {
+          const bounded = Math.max(0, Math.min(6, Number(next)));
+          state.clocks[id] = bounded;
+          range.value = bounded;
+          valueLabel.textContent = bounded;
+          saveState();
+        };
+        minus.addEventListener("click", () => setValue(Number(range.value) - 1));
+        plus.addEventListener("click", () => setValue(Number(range.value) + 1));
+        range.addEventListener("input", () => setValue(range.value));
+        root.appendChild(el);
+      });
+    }
+
+    function renderHomebrew() {
+      const root = document.getElementById("homebrewList");
+      root.innerHTML = "";
+      homebrew.forEach(([name, kind, note]) => {
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+          <span class="tag red">Flag</span>
+          <span><strong>${name}</strong><br><span class="small">${note}</span></span>
+          <span class="tag">${kind}</span>
+        `;
+        root.appendChild(row);
+      });
+    }
+
+    function renderOfficialCreatures() {
+      const root = document.getElementById("officialCreatureList");
+      root.innerHTML = "";
+      officialCreatures.forEach(([region, name, note]) => {
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+          <span class="tag green">Official</span>
+          <span><strong>${name}</strong><br><span class="small">${note}</span></span>
+          <span class="tag blue">${region}</span>
+        `;
+        root.appendChild(row);
+      });
+    }
+
+    function updateSummary() {
+      const totalTodos = todos.length;
+      const completeTodos = todos.filter(([tag, label]) => state.checked[idFrom(`${tag}-${label}`)]).length;
+      const totalActs = acts.length;
+      const completeActs = acts.filter((act) => state.acts[act.id]).length;
+      const total = totalTodos + totalActs;
+      const complete = completeTodos + completeActs;
+      const percent = Math.round((complete / total) * 100);
+      document.getElementById("prepPercent").textContent = `${percent}%`;
+      document.getElementById("openCount").textContent = String(total - complete);
+      document.getElementById("homebrewCount").textContent = String(homebrew.length);
+      document.getElementById("prepBar").style.width = `${percent}%`;
+    }
+
+    function formatTime(seconds) {
+      const safe = Math.max(0, Math.round(seconds));
+      const h = Math.floor(safe / 3600);
+      const m = Math.floor((safe % 3600) / 60);
+      const s = safe % 60;
+      return [h, m, s].map((part) => String(part).padStart(2, "0")).join(":");
+    }
+
+    function updateTimer() {
+      document.getElementById("timerOutput").textContent = formatTime(state.timerRemaining);
+      document.getElementById("timerBar").style.width = `${Math.max(0, state.timerRemaining / SESSION_SECONDS) * 100}%`;
+    }
+
+    function startTimer() {
+      if (timerId) return;
+      lastTick = Date.now();
+      timerId = window.setInterval(() => {
+        const now = Date.now();
+        const elapsed = (now - lastTick) / 1000;
+        lastTick = now;
+        state.timerRemaining = Math.max(0, state.timerRemaining - elapsed);
+        updateTimer();
+        saveState();
+        if (state.timerRemaining <= 0) pauseTimer();
+      }, 500);
+    }
+
+    function pauseTimer() {
+      window.clearInterval(timerId);
+      timerId = null;
+      lastTick = null;
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      state.timerRemaining = SESSION_SECONDS;
+      updateTimer();
+      saveState();
+    }
+
+    function setPrompt(index) {
+      state.promptIndex = ((index % prompts.length) + prompts.length) % prompts.length;
+      document.getElementById("promptText").textContent = prompts[state.promptIndex];
+      saveState();
+    }
+
+    function exportNotes() {
+      const complete = todos.filter(([tag, label]) => state.checked[idFrom(`${tag}-${label}`)]).length;
+      const lines = [
+        "# Nullshore Tracker Export",
+        "",
+        `Prep complete: ${complete}/${todos.length}`,
+        `Session timer remaining: ${formatTime(state.timerRemaining)}`,
+        "",
+        "## Threat Clocks",
+        ...clocks.map(([id, title]) => `- ${title}: ${state.clocks[id] || 0}/6`),
+        "",
+        "## Notes",
+        state.notes || "(No notes yet.)"
+      ];
+      state.notes = `${state.notes ? `${state.notes}\n\n` : ""}${lines.join("\n")}`;
+      document.getElementById("notes").value = state.notes;
+      saveState();
+    }
+
+    function bindEvents() {
+      document.querySelectorAll(".todo-filters button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".todo-filters button").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          activeFilter = button.dataset.filter;
+          renderTodos();
+        });
+      });
+
+      document.getElementById("notes").value = state.notes || "";
+      document.getElementById("notes").addEventListener("input", (event) => {
+        state.notes = event.target.value;
+        saveState();
+      });
+
+      document.getElementById("startTimer").addEventListener("click", startTimer);
+      document.getElementById("pauseTimer").addEventListener("click", pauseTimer);
+      document.getElementById("resetTimer").addEventListener("click", resetTimer);
+      document.getElementById("newPrompt").addEventListener("click", () => setPrompt(state.promptIndex + 1));
+      document.getElementById("pinPrompt").addEventListener("click", () => {
+        const prompt = prompts[state.promptIndex];
+        state.notes = `${state.notes ? `${state.notes}\n\n` : ""}Story prompt: ${prompt}`;
+        document.getElementById("notes").value = state.notes;
+        saveState();
+      });
+      document.getElementById("exportState").addEventListener("click", exportNotes);
+      document.getElementById("resetState").addEventListener("click", () => {
+        if (!window.confirm("Reset local tracker progress and notes?")) return;
+        pauseTimer();
+        state = { ...defaultState, checked: {}, acts: {}, clocks: {} };
+        localStorage.removeItem(STORAGE_KEY);
+        initialize();
+      });
+    }
+
+    function initialize() {
+      renderActs();
+      renderTodos();
+      renderClocks();
+      renderHomebrew();
+      renderOfficialCreatures();
+      updateSummary();
+      updateTimer();
+      document.getElementById("notes").value = state.notes || "";
+      document.getElementById("promptText").textContent = prompts[state.promptIndex || 0];
+    }
+
+    bindEvents();
+    initialize();
+  </script>
+</body>
+</html>

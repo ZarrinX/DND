@@ -93,6 +93,22 @@ The water of both seas is calm at a distance. Near false houses, it becomes unne
 
 Both seas share the same rule for outsiders: **entering the water triggers immediate lethal aggression from everything within it.** The creatures are not malicious — they are territorial in a way that admits no exceptions.
 
+### Sea Creature References
+
+The sea creatures below use official 5e monster references for D&D Beyond. They are intended primarily as warning signs and consequences for entering the water, not as balanced mandatory encounters.
+
+**Bloodless Sea Creatures**
+
+- **Swarm of Quippers** — Use the official Swarm of Quippers stat block. These represent the Bloodless Sea's sudden boiling violence: a patch of smooth red water becoming a churning mass of silver mouths the moment the surface is disturbed.
+- **Giant Crocodile** — Use the official Giant Crocodile stat block. This is the Bloodless Sea's larger territorial predator: a long dark shape moving under the crimson water, slow until something enters its reach.
+
+**Cerulean Sorrows Creatures**
+
+- **Plesiosaurus** — Use the official Plesiosaurus stat block. These represent the Cerulean Sorrows' slow, enormous life: long silhouettes passing far beneath the blue water, indifferent to the sandbar unless the sea is entered.
+- **Dragon Turtle** — Use the official Dragon Turtle stat block. This is an apex warning rather than a normal combat plan: a shell like a moving island beneath the cold blue surface, ancient and unconcerned until its territory is violated.
+
+> **D&D Beyond:** No homebrew entries are required for these sea creatures if the official stat blocks are used without mechanical changes.
+
 ### Sandbar Formation
 
 Where the waters of the two seas meet, they do not mix. Instead, they crystallize. The collision of their incompatible natures produces sand — compressed, neutralized matter that is neither sea. Over time, this sand shifts as the boundary between the seas moves. The terrain of the Nullshore is never quite the same twice.
@@ -100,6 +116,18 @@ Where the waters of the two seas meet, they do not mix. Instead, they crystalliz
 The sandbar typically runs about 150 feet wide, though this varies — in some stretches it narrows to a tight corridor between the seas, and in others it broadens into a wide, open plain. The sand itself is hot to the touch, radiating persistent warmth from the crystallization process beneath the surface, though it never reaches temperatures that would injure someone walking on it or handling it bare-handed.
 
 The sand is not empty. Creatures live within it — burrowing things adapted to the unique chemistry of the crystallized boundary material. Most are not immediately visible, but the surface shifts in ways that sand moved only by wind does not.
+
+### Sandbar Creature Reference
+
+**Sand Stilt Spider** — Use the official Giant Spider stat block with visual reskin only. No mechanical changes are required for D&D Beyond.
+
+The Sand Stilt Spider buries its body beneath the warm pale sand and leaves only its long, rigid legs above the surface. From a distance, those legs resemble the stilts of a raised coastal house or the supports of a half-buried ruin. The creature uses stillness and architecture-like silhouettes to draw travelers close.
+
+> At first, you think you are seeing the remains of a house: thin black stilts jutting from the sand at odd angles, too regular to be driftwood and too still to be alive. Then one of them bends the wrong way. The sand between them rises half an inch, as if something underneath has taken a breath.
+
+The Sand Stilt Spider works especially well near false houses, ruined structures, and stable sand around house anchor points. Its Web can be described as pale, sandy silk stretched just beneath the surface, and its Stealth represents lying buried and motionless beneath the sand.
+
+> **D&D Beyond:** Use Giant Spider exactly as written. Do not add a burrow speed unless intentionally creating a homebrew version.
 
 Storms disrupt the bar's geometry. In the aftermath of a strong storm, the sandbar no longer runs straight — it sways and zig-zags, its path bent by the force of the event. This is temporary. Erosion from both seas works against the distortion, and within days the bar returns to its mean course. Travelers caught in the post-storm period may find their navigation assumptions no longer hold.
 

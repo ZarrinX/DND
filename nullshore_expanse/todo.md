@@ -6,10 +6,10 @@ Items in this file are campaign-wide gaps not already tracked in `plot_structure
 
 ## Lore & World-Building
 
-- [ ] Define shore creature types — names, behaviors, and stat blocks (or official monster references for D&D Beyond)
+- [x] Define shore creature types — official D&D Beyond references selected in `lore.md` (Swarm of Quippers, Giant Crocodile, Plesiosaurus, Dragon Turtle, Giant Spider reskin)
 - [ ] Write fishermen lore entry — who they are, how they end up in the Nullshore, what "betrayed" means in the context of storm summoning
-- [ ] Define storm escalation phases — what happens at each phase narratively and mechanically (referenced in lore but not specified)
-- [ ] Define thaumtec field equipment as usable items — anchor runes, resonance maps, and phase compasses with actual rules text players can reference
+- [ ] Define storm escalation phases as DM-facing time pressure only — narrative signs, pacing triggers, and when to move the party forward
+- [ ] Define thaumtec field equipment as plot color — anchor runes, resonance maps, and phase compasses should not require player-facing item mechanics
 - [ ] Write byway entry mechanics — how players physically cross into the Nullshore (what the gateway looks like, what the transition feels like, any rules that apply)
 
 ---
@@ -68,7 +68,7 @@ The three options are named in the plot structure but none have mechanical desig
 
 ## D&D Beyond Production
 
-- [ ] Compile full homebrew checklist — every creature and NPC that requires a homebrew entry (currently known: Drawn Shades, False House phases, shore creatures)
+- [ ] Compile full homebrew checklist — every creature and NPC that requires a homebrew entry (currently known: Drawn Shades, False House phases)
 - [ ] Verify all magic items and conditions used across the campaign use official 5e names
 - [ ] Confirm the D&D Beyond encounter builder can represent the phased boss fight; if not, decide on workaround before writing the final encounter block
 

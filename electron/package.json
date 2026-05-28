@@ -1,0 +1,51 @@
+{
+  "name": "dnd-companion",
+  "version": "0.1.0",
+  "description": "D&D Beyond companion app — streams character events to Arduino display",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev -- --no-sandbox --disable-gpu",
+    "build": "electron-vite build",
+    "build:win": "electron-vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win dir --x64 && python3 -m zipfile -c dist/DND-Companion-win-x64.zip dist/win-unpacked",
+    "preview": "electron-vite preview",
+    "postinstall": "electron-rebuild",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "serialport": "^12.0.0"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.6.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "electron": "^31.0.0",
+    "electron-builder": "^25.0.0",
+    "electron-vite": "^2.3.0",
+    "jest": "^29.7.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.4.0"
+  },
+  "build": {
+    "appId": "com.dnd.companion",
+    "productName": "DND Companion",
+    "asar": false,
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**",
+      "!**/node_modules/@serialport/bindings-cpp/build/**"
+    ],
+    "win": {
+      "target": "dir",
+      "signAndEditExecutable": false
+    }
+  }
+}
