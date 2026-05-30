@@ -151,6 +151,112 @@ button:not(:disabled):hover {
   overflow-y: auto;
 }
 
+.panel-functions {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Arduino Functions ── */
+
+.functions-empty {
+  font-size: 11px;
+  color: #555;
+  margin: 4px 0 8px;
+}
+
+.function-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.function-entry {
+  background: #14141e;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.function-entry-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.function-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ccc;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.function-desc {
+  font-size: 10px;
+  color: #555;
+  margin: 2px 0 0;
+}
+
+.function-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.btn-fn-run {
+  background: #1a2a1a;
+  color: #7ccc50;
+  border: 1px solid #7ccc50;
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.btn-fn-run:hover:not(:disabled) {
+  background: #2a3a1e;
+}
+
+.btn-fn-run:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.function-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.function-name-input,
+.function-desc-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-fn-add {
+  background: transparent;
+  color: #555;
+  border: 1px dashed #3a3a5a;
+  border-radius: 4px;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 11px;
+  width: 100%;
+  margin-top: 4px;
+  text-align: left;
+}
+
+.btn-fn-add:hover {
+  color: #9c7cff;
+  border-color: #9c7cff;
+}
+
 .panel-title {
   font-size: 12px;
   font-weight: 600;
@@ -169,6 +275,63 @@ button:not(:disabled):hover {
 
 .panel-header .panel-title {
   margin-bottom: 0;
+  flex: 1;
+}
+
+.panel-header-actions {
+  display: flex;
+  gap: 3px;
+}
+
+.btn-panel-action {
+  background: #1e1e2e;
+  color: #666;
+  border: 1px solid #333;
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-size: 10px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.btn-panel-action:hover {
+  background: #2a2a3a;
+  color: #aaa;
+  border-color: #555;
+}
+
+.panel-help-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1e1e2e;
+  border: 1px solid #444;
+  color: #9DFF7A;
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+
+/* ── Per-control labeled rows (Display panel) ── */
+
+.display-control-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.display-control-label {
+  font-size: 10px;
+  color: #555;
+  white-space: nowrap;
+  width: 32px;
+  flex-shrink: 0;
 }
 
 .scale-radio-group {
@@ -291,6 +454,36 @@ button:not(:disabled):hover {
 .animation-row {
   display: flex;
   gap: 6px;
+}
+
+.brightness-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.brightness-label {
+  font-size: 10px;
+  color: #555;
+  white-space: nowrap;
+  width: 56px;
+  flex-shrink: 0;
+}
+
+.brightness-slider {
+  flex: 1;
+  accent-color: #9c7cff;
+  height: 3px;
+  cursor: pointer;
+}
+
+.brightness-value {
+  font-size: 10px;
+  color: #777;
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
 }
 
 .btn-animation {

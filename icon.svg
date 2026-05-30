@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="140" fill="#050805"/>
+
+  <g stroke="#9DFF7A" stroke-width="12" fill="none" opacity="0.75">
+    <path d="M110 150 L170 90 L854 90 L914 150 L914 874 L854 934 L170 934 L110 874 Z"/>
+  </g>
+
+  <g fill="#9DFF7A" font-family="monospace">
+    <text x="180" y="180" font-size="52">MU/TH/UR</text>
+    <text x="180" y="860" font-size="42">■ LINK ACTIVE</text>
+    <text x="710" y="860" font-size="42">ID: ZR-01</text>
+  </g>
+
+  <g fill="#9DFF7A">
+    <!-- Z -->
+    <path d="M250 300 H520 V360 H360 L520 620 V680 H250 V620 H410 L250 360 Z"/>
+    <!-- R -->
+    <path d="M560 300 H760
+             Q840 300 840 380
+             V430
+             Q840 500 770 530
+             L850 700
+             H770
+             L700 550
+             H640
+             V700
+             H560 Z
+             M640 370
+             V480
+             H740
+             Q770 480 770 450
+             V400
+             Q770 370 740 370 Z"/>
+  </g>
+</svg>

@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 const OLED_COLS = 21
+const OLED_COLS_2X = 10  // 128px / 12px per char at textSize 2
 const OLED_LINES = 6
 
 function OledPreview({ text, scale, align }: { text: string; scale: 1 | 2; align: TextAlign }): React.ReactElement {
   const activeLines = OLED_LINES / scale
   const rawLines = text.split('\n')
+  const cols = scale === 2 ? OLED_COLS_2X : OLED_COLS
   const lines = Array.from({ length: activeLines }, (_, i) =>
-    (rawLines[i] ?? '').slice(0, OLED_COLS),
+    (rawLines[i] ?? '').slice(0, cols),
   )
   return (
     <div className="oled-preview" style={{ fontSize: scale === 2 ? 24 : 12 }}>
@@ -44,14 +46,18 @@ const PIXEL_ANIM_STYLE_INV: Record<LedAnimation, React.CSSProperties> = {
 function NeoPixelPreview({
   ringColor,
   ringAnimation,
+  ringBrightness,
   centerColor,
   centerAnimation,
+  centerBrightness,
   centerInvert,
 }: {
   ringColor: string
   ringAnimation: LedAnimation
+  ringBrightness: number
   centerColor: string
   centerAnimation: LedAnimation
+  centerBrightness: number
   centerInvert: boolean
 }): React.ReactElement {
   const centerStyle = centerInvert ? PIXEL_ANIM_STYLE_INV[centerAnimation] : PIXEL_ANIM_STYLE[centerAnimation]
@@ -72,12 +78,12 @@ function NeoPixelPreview({
         </filter>
       </defs>
       <circle cx={CX} cy={CY} r={48} fill="#080808" stroke="#1a1a1a" strokeWidth="1" />
-      <g style={PIXEL_ANIM_STYLE[ringAnimation]}>
+      <g style={{ ...PIXEL_ANIM_STYLE[ringAnimation], opacity: ringBrightness / 100 }}>
         {outerPixels.map((p, i) => (
           <circle key={i} cx={p.x} cy={p.y} r={PIXEL_R} fill={ringColor} filter="url(#glow)" />
         ))}
       </g>
-      <g style={centerStyle}>
+      <g style={{ ...centerStyle, opacity: centerBrightness / 100 }}>
         <circle cx={CX} cy={CY} r={PIXEL_R} fill={centerColor} filter="url(#glow)" />
       </g>
     </svg>
@@ -105,11 +111,20 @@ interface Macro {
   displayText: string
   textScale: 1 | 2
   textAlign: TextAlign
+  displayAnimation: LedAnimation
   ledColor: string
   ledAnimation: LedAnimation
   centerColor: string
   centerAnimation: LedAnimation
+  centerBrightness: number
   centerInvert: boolean
+  ringBrightness: number
+}
+
+interface ArduinoFunction {
+  id: string
+  name: string
+  description: string
 }
 
 const BAUD_RATES = [9600, 19200, 38400, 57600, 115200]
@@ -128,8 +143,11 @@ let historyIdCounter = 0
 export default function App(): React.ReactElement {
   // Connection state
   const [ports, setPorts] = useState<PortInfo[]>([])
-  const [selectedPort, setSelectedPort] = useState('')
-  const [baudRate, setBaudRate] = useState(DEFAULT_BAUD)
+  const [selectedPort, setSelectedPort] = useState(() => localStorage.getItem('lastPort') ?? '')
+  const [baudRate, setBaudRate] = useState<number>(() => {
+    const saved = Number(localStorage.getItem('lastBaud'))
+    return BAUD_RATES.includes(saved) ? saved : DEFAULT_BAUD
+  })
   const [status, setStatus] = useState<SerialStatus>('disconnected')
   const [connectedPort, setConnectedPort] = useState<string | undefined>()
   const [errorMsg, setErrorMsg] = useState<string | undefined>()
@@ -138,12 +156,15 @@ export default function App(): React.ReactElement {
   const [displayText, setDisplayText] = useState('')
   const [textScale, setTextScale] = useState<1 | 2>(1)
   const [textAlign, setTextAlign] = useState<TextAlign>('left')
+  const [displayAnim, setDisplayAnim] = useState<LedAnimation>('solid')
 
   // NeoPixel panel state
   const [ledColor, setLedColor] = useState('#ff0000')
   const [ledAnimation, setLedAnimation] = useState<LedAnimation>('solid')
+  const [ringBrightness, setRingBrightness] = useState(50)
   const [centerColor, setCenterColor] = useState('#ff0000')
   const [centerAnimation, setCenterAnimation] = useState<LedAnimation>('solid')
+  const [centerBrightness, setCenterBrightness] = useState(50)
   const [invertCenter, setInvertCenter] = useState(false)
 
   // Macros
@@ -153,6 +174,12 @@ export default function App(): React.ReactElement {
   const dragIndex = useRef<number | null>(null)
   const dragOverIndex = useRef<number | null>(null)
   const [macroName, setMacroName] = useState('')
+
+  // Arduino Functions
+  const [arduinoFunctions, setArduinoFunctions] = useState<ArduinoFunction[]>([])
+  const [showAddFunction, setShowAddFunction] = useState(false)
+  const [newFnName, setNewFnName] = useState('')
+  const [newFnDesc, setNewFnDesc] = useState('')
 
   // History
   const [history, setHistory] = useState<HistoryEntry[]>([])
@@ -176,6 +203,9 @@ export default function App(): React.ReactElement {
     window.macrosApi?.load().then((raw) => {
       setMacros(raw as Macro[])
     }).catch(() => {})
+    window.functionsApi?.load().then((raw) => {
+      setArduinoFunctions(raw as ArduinoFunction[])
+    }).catch(() => {})
     const removeListener = window.serialApi?.onStatus((event) => {
       setStatus(event.status)
       if (event.port) setConnectedPort(event.port)
@@ -190,14 +220,17 @@ export default function App(): React.ReactElement {
     if (status === 'connected') {
       await window.serialApi?.disconnect()
     } else if (selectedPort) {
+      localStorage.setItem('lastPort', selectedPort)
+      localStorage.setItem('lastBaud', String(baudRate))
       await window.serialApi?.connect(selectedPort, baudRate)
     }
   }
 
   function applyAlign(line: string): string {
-    const trimmed = line.slice(0, OLED_COLS)
+    const cols = textScale === 2 ? OLED_COLS_2X : OLED_COLS
+    const trimmed = line.slice(0, cols)
     if (textAlign === 'left') return trimmed
-    const pad = OLED_COLS - trimmed.length
+    const pad = cols - trimmed.length
     if (textAlign === 'right') return ' '.repeat(pad) + trimmed
     // center
     const left = Math.floor(pad / 2)
@@ -211,7 +244,7 @@ export default function App(): React.ReactElement {
     rawLines.forEach((line, i) => {
       display[`line${i + 1}`] = applyAlign(line)
     })
-    return { event: 'manual', display }
+    return { event: 'display', display, scale: textScale, displayAnimation: displayAnim }
   }
 
   async function handleSendDisplay(text = displayText): Promise<void> {
@@ -227,12 +260,14 @@ export default function App(): React.ReactElement {
   async function handleSendLeds(
     color = ledColor,
     animation = ledAnimation,
+    brightness = ringBrightness,
     cColor = centerColor,
     cAnimation = centerAnimation,
+    cBrightness = centerBrightness,
   ): Promise<void> {
     const payload = {
       event: 'manual',
-      leds: { color, animation, center: { color: cColor, animation: cAnimation, invertPhase: invertCenter } },
+      leds: { color, animation, brightness, center: { color: cColor, animation: cAnimation, brightness: cBrightness, invertPhase: invertCenter } },
     }
     try {
       await window.serialApi?.send(payload)
@@ -248,8 +283,9 @@ export default function App(): React.ReactElement {
     const align = macro.textAlign ?? 'left'
     const display: Record<string, string> = {}
     rawLines.forEach((line, i) => {
-      const trimmed = line.slice(0, OLED_COLS)
-      const pad = OLED_COLS - trimmed.length
+      const cols = macro.textScale === 2 ? OLED_COLS_2X : OLED_COLS
+      const trimmed = line.slice(0, cols)
+      const pad = cols - trimmed.length
       display[`line${i + 1}`] =
         align === 'right'
           ? ' '.repeat(pad) + trimmed
@@ -260,10 +296,13 @@ export default function App(): React.ReactElement {
     return {
       event: 'macro',
       display,
+      scale: macro.textScale,
+      displayAnimation: macro.displayAnimation ?? 'solid',
       leds: {
         color: macro.ledColor,
         animation: macro.ledAnimation,
-        center: { color: macro.centerColor, animation: macro.centerAnimation, invertPhase: macro.centerInvert ?? false },
+        brightness: macro.ringBrightness ?? 50,
+        center: { color: macro.centerColor, animation: macro.centerAnimation, brightness: macro.centerBrightness ?? 50, invertPhase: macro.centerInvert ?? false },
       },
     }
   }
@@ -282,10 +321,13 @@ export default function App(): React.ReactElement {
     setDisplayText(macro.displayText)
     setTextScale(macro.textScale)
     setTextAlign(macro.textAlign ?? 'left')
+    setDisplayAnim(macro.displayAnimation ?? 'solid')
     setLedColor(macro.ledColor)
     setLedAnimation(macro.ledAnimation)
+    setRingBrightness(macro.ringBrightness ?? 50)
     setCenterColor(macro.centerColor)
     setCenterAnimation(macro.centerAnimation)
+    setCenterBrightness(macro.centerBrightness ?? 50)
     setInvertCenter(macro.centerInvert ?? false)
     setLoadedMacroId(macro.id)
     setShowSaveBar(false)
@@ -296,7 +338,7 @@ export default function App(): React.ReactElement {
     if (!loadedMacroId) return
     const next = macros.map((m) =>
       m.id === loadedMacroId
-        ? { ...m, displayText, textScale, textAlign, ledColor, ledAnimation, centerColor, centerAnimation, centerInvert: invertCenter }
+        ? { ...m, displayText, textScale, textAlign, displayAnimation: displayAnim, ledColor, ledAnimation, ringBrightness, centerColor, centerAnimation, centerBrightness, centerInvert: invertCenter }
         : m,
     )
     setMacros(next)
@@ -312,10 +354,13 @@ export default function App(): React.ReactElement {
       displayText,
       textScale,
       textAlign,
+      displayAnimation: displayAnim,
       ledColor,
       ledAnimation,
+      ringBrightness,
       centerColor,
       centerAnimation,
+      centerBrightness,
       centerInvert: invertCenter,
     }
     const next = [...macros, macro]
@@ -342,6 +387,57 @@ export default function App(): React.ReactElement {
     next.splice(to, 0, moved)
     setMacros(next)
     await window.macrosApi?.save(next)
+  }
+
+  async function handleExportMacros(): Promise<void> {
+    await window.macrosApi?.exportToFile(macros)
+  }
+
+  async function handleImportMacros(): Promise<void> {
+    const imported = await window.macrosApi?.importFromFile()
+    if (imported) {
+      setMacros(imported as Macro[])
+      await window.macrosApi?.save(imported)
+    }
+  }
+
+  async function handleExportFunctions(): Promise<void> {
+    await window.functionsApi?.exportToFile(arduinoFunctions)
+  }
+
+  async function handleImportFunctions(): Promise<void> {
+    const imported = await window.functionsApi?.importFromFile()
+    if (imported) {
+      setArduinoFunctions(imported as ArduinoFunction[])
+      await window.functionsApi?.save(imported)
+    }
+  }
+
+  async function handleRunFunction(fn: ArduinoFunction): Promise<void> {
+    const payload = { event: 'function', name: fn.name }
+    await window.serialApi?.send(payload)
+    addHistory(payload)
+  }
+
+  async function handleAddFunction(): Promise<void> {
+    if (!newFnName.trim()) return
+    const fn: ArduinoFunction = {
+      id: crypto.randomUUID(),
+      name: newFnName.trim(),
+      description: newFnDesc.trim(),
+    }
+    const next = [...arduinoFunctions, fn]
+    setArduinoFunctions(next)
+    await window.functionsApi?.save(next)
+    setNewFnName('')
+    setNewFnDesc('')
+    setShowAddFunction(false)
+  }
+
+  async function handleDeleteFunction(id: string): Promise<void> {
+    const next = arduinoFunctions.filter((f) => f.id !== id)
+    setArduinoFunctions(next)
+    await window.functionsApi?.save(next)
   }
 
   const isConnected = status === 'connected'
@@ -407,8 +503,10 @@ export default function App(): React.ReactElement {
       <div className="panels">
         {/* Display panel */}
         <section className="panel">
-          <div className="panel-header">
-            <h2 className="panel-title">Display</h2>
+          <h2 className="panel-title">Display</h2>
+
+          <div className="display-control-row">
+            <span className="display-control-label">Scale</span>
             <div className="scale-radio-group">
               {([1, 2] as const).map((s) => (
                 <label key={s} className={`scale-radio${textScale === s ? ' active' : ''}`}>
@@ -431,6 +529,10 @@ export default function App(): React.ReactElement {
                 </label>
               ))}
             </div>
+          </div>
+
+          <div className="display-control-row">
+            <span className="display-control-label">Align</span>
             <div className="align-btn-group">
               {(['left', 'center', 'right'] as TextAlign[]).map((a) => (
                 <button
@@ -439,6 +541,21 @@ export default function App(): React.ReactElement {
                   onClick={() => setTextAlign(a)}
                 >
                   {a[0].toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="display-control-row">
+            <span className="display-control-label">Anim</span>
+            <div className="animation-row">
+              {ANIMATIONS.map((a) => (
+                <button
+                  key={a}
+                  className={`btn-animation${displayAnim === a ? ' active' : ''}`}
+                  onClick={() => setDisplayAnim(a)}
+                >
+                  {a}
                 </button>
               ))}
             </div>
@@ -473,7 +590,7 @@ export default function App(): React.ReactElement {
         <section className="panel">
           <h2 className="panel-title">NeoPixel</h2>
 
-          <NeoPixelPreview ringColor={ledColor} ringAnimation={ledAnimation} centerColor={centerColor} centerAnimation={centerAnimation} centerInvert={invertCenter} />
+          <NeoPixelPreview ringColor={ledColor} ringAnimation={ledAnimation} ringBrightness={ringBrightness} centerColor={centerColor} centerAnimation={centerAnimation} centerBrightness={centerBrightness} centerInvert={invertCenter} />
 
           <label className="field-label">Ring (pixels 1–6)</label>
           <div className="color-row">
@@ -501,6 +618,15 @@ export default function App(): React.ReactElement {
                 {a}
               </button>
             ))}
+          </div>
+          <div className="brightness-row">
+            <label className="brightness-label">Brightness</label>
+            <input
+              type="range" min={1} max={100} value={ringBrightness}
+              className="brightness-slider"
+              onChange={(e) => setRingBrightness(Number(e.target.value))}
+            />
+            <span className="brightness-value">{ringBrightness}%</span>
           </div>
 
           <label className="field-label" style={{ marginTop: 8 }}>Center (pixel 0)</label>
@@ -537,6 +663,15 @@ export default function App(): React.ReactElement {
               inv
             </button>
           </div>
+          <div className="brightness-row">
+            <label className="brightness-label">Brightness</label>
+            <input
+              type="range" min={1} max={100} value={centerBrightness}
+              className="brightness-slider"
+              onChange={(e) => setCenterBrightness(Number(e.target.value))}
+            />
+            <span className="brightness-value">{centerBrightness}%</span>
+          </div>
 
           <div className="btn-row">
             <button className="btn-send" onClick={() => handleSendLeds()} disabled={!isConnected}>
@@ -547,7 +682,13 @@ export default function App(): React.ReactElement {
 
         {/* Macros panel */}
         <section className="panel panel-macros">
-          <h2 className="panel-title">Macros</h2>
+          <div className="panel-header">
+            <h2 className="panel-title">Macros</h2>
+            <div className="panel-header-actions">
+              <button className="btn-panel-action" onClick={handleImportMacros} title="Import macros from JSON file">Import</button>
+              <button className="btn-panel-action" onClick={handleExportMacros} title="Export macros to JSON file">Export</button>
+            </div>
+          </div>
           {macros.length === 0 ? (
             <p className="macros-empty">No macros saved yet. Configure the panels and click Save Macro.</p>
           ) : (
@@ -597,6 +738,87 @@ export default function App(): React.ReactElement {
                 </div>
               ))}
             </div>
+          )}
+        </section>
+
+        {/* Arduino Functions panel */}
+        <section className="panel panel-functions">
+          <div className="panel-header">
+            <h2 className="panel-title">Functions</h2>
+            <span
+              className="panel-help-icon"
+              title={'Sends {"event":"function","name":"<name>"} to the Arduino.\nHandle each name in dispatchFunction() in sketch.ino.'}
+            >?</span>
+            <div className="panel-header-actions">
+              <button className="btn-panel-action" onClick={handleImportFunctions} title="Import functions from JSON file">Import</button>
+              <button className="btn-panel-action" onClick={handleExportFunctions} title="Export functions to JSON file">Export</button>
+            </div>
+          </div>
+          {arduinoFunctions.length === 0 && !showAddFunction ? (
+            <p className="functions-empty">No functions saved yet. Click + to add one.</p>
+          ) : (
+            <div className="function-list">
+              {arduinoFunctions.map((fn) => (
+                <div key={fn.id} className="function-entry">
+                  <div className="function-entry-top">
+                    <span className="function-name">{fn.name}</span>
+                    <div className="function-actions">
+                      <button
+                        className="btn-fn-run"
+                        onClick={() => handleRunFunction(fn)}
+                        disabled={!isConnected}
+                      >
+                        Run
+                      </button>
+                      <button
+                        className="btn-saved-delete"
+                        onClick={() => handleDeleteFunction(fn.id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                  {fn.description && (
+                    <p className="function-desc">{fn.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {showAddFunction ? (
+            <div className="function-add-form">
+              <input
+                className="text-input function-name-input"
+                value={newFnName}
+                onChange={(e) => setNewFnName(e.target.value)}
+                placeholder="Function name…"
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleAddFunction()
+                  if (e.key === 'Escape') { setShowAddFunction(false); setNewFnName(''); setNewFnDesc('') }
+                }}
+              />
+              <input
+                className="text-input function-desc-input"
+                value={newFnDesc}
+                onChange={(e) => setNewFnDesc(e.target.value)}
+                placeholder="Description (optional)…"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleAddFunction()
+                  if (e.key === 'Escape') { setShowAddFunction(false); setNewFnName(''); setNewFnDesc('') }
+                }}
+              />
+              <div className="btn-row">
+                <button className="btn-save" onClick={handleAddFunction} disabled={!newFnName.trim()}>
+                  Add
+                </button>
+                <button className="btn-clear" onClick={() => { setShowAddFunction(false); setNewFnName(''); setNewFnDesc('') }}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button className="btn-fn-add" onClick={() => setShowAddFunction(true)}>+ Add Function</button>
           )}
         </section>
       </div>

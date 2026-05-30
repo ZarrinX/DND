@@ -5,6 +5,14 @@ declare global {
     macrosApi?: {
       load(): Promise<unknown[]>
       save(macros: unknown[]): Promise<void>
+      exportToFile(macros: unknown[]): Promise<void>
+      importFromFile(): Promise<unknown[] | null>
+    }
+    functionsApi?: {
+      load(): Promise<unknown[]>
+      save(functions: unknown[]): Promise<void>
+      exportToFile(functions: unknown[]): Promise<void>
+      importFromFile(): Promise<unknown[] | null>
     }
     serialApi?: {
       listPorts(): Promise<Array<{ path: string; manufacturer?: string; serialNumber?: string }>>

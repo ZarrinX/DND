@@ -18,6 +18,15 @@ export interface SerialStatusEvent {
 contextBridge.exposeInMainWorld('macrosApi', {
   load: (): Promise<unknown[]> => ipcRenderer.invoke('macros:load'),
   save: (macros: unknown[]): Promise<void> => ipcRenderer.invoke('macros:save', macros),
+  exportToFile: (macros: unknown[]): Promise<void> => ipcRenderer.invoke('macros:exportToFile', macros),
+  importFromFile: (): Promise<unknown[] | null> => ipcRenderer.invoke('macros:importFromFile'),
+})
+
+contextBridge.exposeInMainWorld('functionsApi', {
+  load: (): Promise<unknown[]> => ipcRenderer.invoke('functions:load'),
+  save: (functions: unknown[]): Promise<void> => ipcRenderer.invoke('functions:save', functions),
+  exportToFile: (functions: unknown[]): Promise<void> => ipcRenderer.invoke('functions:exportToFile', functions),
+  importFromFile: (): Promise<unknown[] | null> => ipcRenderer.invoke('functions:importFromFile'),
 })
 
 contextBridge.exposeInMainWorld('serialApi', {

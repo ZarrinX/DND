@@ -2,11 +2,13 @@
   "name": "dnd-companion",
   "version": "0.1.0",
   "description": "D&D Beyond companion app — streams character events to Arduino display",
+  "author": "zrice",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev -- --no-sandbox --disable-gpu",
     "build": "electron-vite build",
-    "build:win": "electron-vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win dir --x64 && python3 -m zipfile -c dist/DND-Companion-win-x64.zip dist/win-unpacked",
+    "generate-icon": "node scripts/generate-icon.js",
+    "build:win": "node scripts/generate-icon.js && electron-vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win dir --x64 && python3 -m zipfile -c dist/DND-Companion-win-x64.zip dist/win-unpacked",
     "preview": "electron-vite preview",
     "postinstall": "electron-rebuild",
     "test": "jest",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@electron/rebuild": "^3.6.0",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/jest": "^29.5.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.0",
@@ -29,6 +32,7 @@
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.0"
   },
   "build": {
@@ -36,12 +40,16 @@
     "productName": "DND Companion",
     "asar": false,
     "npmRebuild": false,
+    "icon": "resources/icon.png",
     "directories": {
       "output": "dist"
     },
     "files": [
       "out/**",
       "!**/node_modules/@serialport/bindings-cpp/build/**"
+    ],
+    "extraResources": [
+      { "from": "resources/icon.png", "to": "icon.png" }
     ],
     "win": {
       "target": "dir",
