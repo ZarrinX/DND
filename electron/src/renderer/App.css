@@ -1066,3 +1066,50 @@ button:not(:disabled):hover {
   text-overflow: ellipsis;
   max-width: 300px;
 }
+
+/* ── Timer panel ── */
+
+.panel-timer {
+  flex: 0.8;
+}
+
+.timer-countdown {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'SFMono-Regular', 'Consolas', monospace;
+  color: #e0e0e0;
+  text-align: center;
+  letter-spacing: 0.05em;
+  padding: 8px 0 4px;
+}
+
+.btn-timer-start {
+  flex: 1;
+  color: #4caf50;
+  border-color: #4caf50;
+}
+
+.btn-timer-start:hover:not(:disabled) {
+  background: #1a2a1a;
+}
+
+.btn-timer-stop {
+  flex: 1;
+  color: #f44336;
+  border-color: #f44336;
+}
+
+.btn-timer-stop:hover {
+  background: #2a1a1a;
+}
+
+.btn-timer-reset {
+  flex: 1;
+  color: #888;
+  border-color: #555;
+}
+
+.btn-timer-reset:hover:not(:disabled) {
+  color: #e0e0e0;
+  border-color: #888;
+}

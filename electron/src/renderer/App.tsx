@@ -130,6 +130,7 @@ interface ArduinoFunction {
 const BAUD_RATES = [9600, 19200, 38400, 57600, 115200]
 const DEFAULT_BAUD = 115200
 const ANIMATIONS: LedAnimation[] = ['solid', 'pulse', 'flash']
+const TIMER_OPTIONS = Array.from({ length: 12 }, (_, i) => (i + 1) * 5) // 5, 10, ..., 60 minutes
 
 const STATUS_COLOR: Record<SerialStatus, string> = {
   disconnected: '#888',
@@ -139,6 +140,21 @@ const STATUS_COLOR: Record<SerialStatus, string> = {
 }
 
 let historyIdCounter = 0
+
+function formatTimerDisplay(seconds: number): string {
+  const m = Math.floor(seconds / 60).toString().padStart(2, '0')
+  const s = (seconds % 60).toString().padStart(2, '0')
+  return `${m}:${s}`
+}
+
+function buildTimerPayload(seconds: number): object {
+  const timeStr = formatTimerDisplay(seconds)
+  return {
+    event: 'display',
+    display: { line1: '  TIMER', line2: '  ' + timeStr },
+    scale: 2,
+  }
+}
 
 export default function App(): React.ReactElement {
   // Connection state
@@ -181,6 +197,13 @@ export default function App(): React.ReactElement {
   const [newFnName, setNewFnName] = useState('')
   const [newFnDesc, setNewFnDesc] = useState('')
 
+  // Timer
+  const [timerMinutes, setTimerMinutes] = useState(5)
+  const [timerRemaining, setTimerRemaining] = useState(5 * 60)
+  const [timerRunning, setTimerRunning] = useState(false)
+  const timerRemainingRef = useRef(5 * 60)
+  timerRemainingRef.current = timerRemaining
+
   // History
   const [history, setHistory] = useState<HistoryEntry[]>([])
 
@@ -214,6 +237,17 @@ export default function App(): React.ReactElement {
     })
     return removeListener
   }, [refreshPorts])
+
+  useEffect(() => {
+    if (!timerRunning) return
+    const id = setInterval(() => {
+      const next = Math.max(0, timerRemainingRef.current - 1)
+      setTimerRemaining(next)
+      void window.serialApi?.send(buildTimerPayload(next))
+      if (next === 0) setTimerRunning(false)
+    }, 1000)
+    return () => clearInterval(id)
+  }, [timerRunning])
 
   async function handleConnect(): Promise<void> {
     setErrorMsg(undefined)
@@ -438,6 +472,27 @@ export default function App(): React.ReactElement {
     const next = arduinoFunctions.filter((f) => f.id !== id)
     setArduinoFunctions(next)
     await window.functionsApi?.save(next)
+  }
+
+  function handleTimerMinutesChange(mins: number): void {
+    setTimerMinutes(mins)
+    if (!timerRunning) {
+      setTimerRemaining(mins * 60)
+    }
+  }
+
+  function handleTimerStart(): void {
+    void window.serialApi?.send(buildTimerPayload(timerRemaining))
+    setTimerRunning(true)
+  }
+
+  function handleTimerStop(): void {
+    setTimerRunning(false)
+  }
+
+  function handleTimerReset(): void {
+    setTimerRunning(false)
+    setTimerRemaining(timerMinutes * 60)
   }
 
   const isConnected = status === 'connected'
@@ -676,6 +731,52 @@ export default function App(): React.ReactElement {
           <div className="btn-row">
             <button className="btn-send" onClick={() => handleSendLeds()} disabled={!isConnected}>
               Send
+            </button>
+          </div>
+        </section>
+
+        {/* Timer panel */}
+        <section className="panel panel-timer">
+          <h2 className="panel-title">Timer</h2>
+
+          <OledPreview
+            text={`  TIMER\n  ${formatTimerDisplay(timerRemaining)}`}
+            scale={2}
+            align="left"
+          />
+
+          <div className="display-control-row">
+            <span className="display-control-label">Duration</span>
+            <select
+              value={timerMinutes}
+              onChange={(e) => handleTimerMinutesChange(Number(e.target.value))}
+              disabled={timerRunning}
+            >
+              {TIMER_OPTIONS.map((m) => (
+                <option key={m} value={m}>{m} min</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="timer-countdown">{formatTimerDisplay(timerRemaining)}</div>
+
+          <div className="btn-row">
+            {timerRunning ? (
+              <button className="btn-timer-stop" onClick={handleTimerStop}>Stop</button>
+            ) : (
+              <button
+                className="btn-timer-start"
+                onClick={handleTimerStart}
+                disabled={!isConnected || timerRemaining === 0}
+              >
+                Start
+              </button>
+            )}
+            <button
+              className="btn-timer-reset"
+              onClick={handleTimerReset}
+            >
+              Reset
             </button>
           </div>
         </section>
